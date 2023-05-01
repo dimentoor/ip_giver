@@ -1,4 +1,6 @@
 import pandas as pd
+import open_save
+import urls
 
 
 class Converter:
@@ -12,13 +14,11 @@ class Converter:
                                columns=['date', 'time', 's-ip', 'cs-method', 'cs-uri-stem', 'cs-uri-query', 's-port',
                                         'cs-username', 'c-ip', 'cs(User-Agent)', 'sc-status',
                                         'sc-substatus', 'sc-win32-status', 'time-taken'])
-        print(self.df)
         return self.df
 
     def new_df(self):
         self.cut_df = pd.DataFrame(data=self.df[['cs-method', 'cs-username', 'c-ip']])
-        print(self.cut_df)
-        pass
+        return self.cut_df
 
     def convert_cols(self):
         # print(self.df)
@@ -41,6 +41,15 @@ class Converter:
     def ip_sep(self):
         pass
 
-    def save_result(self):
-        pass
+    # start all functions
+    def all_samples_threats(self):
+        self.convert_df()
+        self.convert_cols()
+        self.new_df()
+
+    def save_result(self, path):
+        save = open_save.FileDumper(path)
+        dict_elist = {"all_logs": self.df,
+                      "short_info": self.cut_df}
+        save.write_file(path, dict_elist)
         # object of  file dumper

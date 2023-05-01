@@ -19,25 +19,13 @@ class FileLoader:
 
 
 class FileDumper:
-    def __init__(self, path, sheet_name, df):
+    def __init__(self, path):
         self.path = path
-        self.sheet_name = sheet_name
-        self.df = df
 
-    def write_file(self):
-        with pd.ExcelWriter(self.path) as writer:
-            self.df.to_excel(writer, sheet_name='test')
-            print("Wrote to {}.".format(self.path))
+    @staticmethod
+    def write_file(path, elist: dict):
+        with pd.ExcelWriter(path) as writer:
+            for list_name, df in elist.items():
+                df.to_excel(writer, sheet_name=list_name)
+        print("Wrote to {}.".format, path)
 
-    # def save_result(self, filename):
-    #     dict_samples = {"unique_sample": self.unique,
-    #                     "users_sample": self.users,
-    #                     "black_list_sample": self.black_list,
-    #                     "threat_types_sample": self.threat_types,
-    #                     "types_sample": self.types}
-    #     self.writefile(filename, dict_samples)
-
-    # def writefile(self, filename, samples: dict):
-    #     with pd.ExcelWriter(filename) as writer:
-    #         for sample_name, sample in samples.items():
-    #             sample.to_excel(writer, sheet_name=sample_name)
