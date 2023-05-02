@@ -10,9 +10,7 @@ class FileLoader:
     def read_file(self):
         with open(self.path, 'r+') as input_file:
             for line in input_file:
-                # print(line.readline())
                 self.list.append(line.split())
-                # print(self.list)
         print("Read {}.".format(self.path))
         # print(self.list)
         return self.list
