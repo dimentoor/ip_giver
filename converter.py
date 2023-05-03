@@ -77,5 +77,5 @@ class Converter:
                       "short_info": self.clear_df,
                       "ip in dif cells": self.ip_df
                       }
-        save.write_file(path, dict_elist)
+        save.write_file(dict_elist)
 

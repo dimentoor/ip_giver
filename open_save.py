@@ -20,10 +20,8 @@ class FileDumper:
     def __init__(self, path):
         self.path = path
 
-    @staticmethod
-    def write_file(path, elist: dict):
-        with pd.ExcelWriter(path) as writer:
+    def write_file(self, elist: dict):
+        with pd.ExcelWriter(self.path) as writer:
             for list_name, df in elist.items():
                 df.to_excel(writer, sheet_name=list_name)
-        print("Wrote to {}.".format, path)
-
+        print("Wrote to {}.".format, self.path)
