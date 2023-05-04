@@ -17,7 +17,7 @@ class Converter:
         for item in self.file_list:
             for item_1 in item:
                 count_of_items += 1
-            if count_of_items < 15:
+            if count_of_items == 14:
                 clear_file_list.append(item)
             else:
                 print(item)
@@ -28,19 +28,19 @@ class Converter:
                                         'cs-username', 'c-ip', 'cs(User-Agent)', 'sc-status',
                                         'sc-substatus', 'sc-win32-status', 'time-taken'])
         # convert columns into correct type
-        # convert_dict = {'s-port': 'int',
-        #                 'sc-status': 'int32',
-        #                 'sc-substatus': 'int32',
-        #                 'sc-win32-status': 'int32',
-        #                 'time-taken': 'int32'
-        #                 }
-        # # df.astype({'col1': 'int32'}).dtypes
-        #
-        # datatypes = self.df.dtypes
-        # print(datatypes)
-        # self.df = self.df.astype(convert_dict)
-        # print("")
-        # print(datatypes)
+        convert_dict = {'s-port': 'uint',
+                        'sc-status': 'uint',
+                        'sc-substatus': 'uint',
+                        'sc-win32-status': 'uint',
+                        'time-taken': 'int64'
+                        }
+        # df.astype({'col1': 'int32'}).dtypes
+
+        datatypes = self.df.dtypes
+        print(datatypes)
+        self.df = self.df.astype(convert_dict)
+        print("")
+        print(datatypes)
         return self.df
 
     # get df with needed columns
@@ -92,7 +92,7 @@ class Converter:
     def save_result(self, path):
         save = open_save.FileDumper(path)
         dict_elist = {
-            # "all_logs": self.df,
+            "all_logs": self.df,
             "short_info": self.clear_df,
             "ip in dif cells": self.ip_df
         }
