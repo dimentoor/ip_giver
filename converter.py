@@ -36,11 +36,11 @@ class Converter:
                         }
         # df.astype({'col1': 'int32'}).dtypes
 
-        datatypes = self.df.dtypes
-        print(datatypes)
+        # datatypes = self.df.dtypes
+        # print(datatypes)
         self.df = self.df.astype(convert_dict)
-        print("")
-        print(datatypes)
+        # print("")
+        # print(datatypes)
         return self.df
 
     # get df with needed columns
@@ -84,15 +84,15 @@ class Converter:
     #  use call functions
     def use_all_functions(self):
         self.convert_df()
-        # self.new_df()
-        # self.del_requests()
-        # self.ip_sep()
+        self.new_df()
+        self.del_requests()
+        self.ip_sep()
 
     # write function execution result into xlsx document in different sheets
     def save_result(self, path):
         save = open_save.FileDumper(path)
         dict_elist = {
-            "all_logs": self.df,
+            # "all_logs": self.df,
             "short_info": self.clear_df,
             "ip in dif cells": self.ip_df
         }
