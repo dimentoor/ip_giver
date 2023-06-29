@@ -6,9 +6,6 @@ class Converter:
     def __init__(self, file_list):
         self.file_list = file_list
         self.df = pd.DataFrame()
-        self.cut_df = pd.DataFrame()  # think that this is incorrect
-        self.clear_df = pd.DataFrame()
-        self.ip_df = pd.DataFrame()
 
     # convert list of logs to df (include all columns)
     def convert_df(self):
@@ -20,7 +17,8 @@ class Converter:
             if count_of_items == 14:
                 clear_file_list.append(item)
             else:
-                print(item)
+                pass
+                # print(item)
             count_of_items = 0
 
         self.df = pd.DataFrame(clear_file_list,
@@ -34,32 +32,49 @@ class Converter:
                         'sc-win32-status': 'uint',
                         'time-taken': 'int64'
                         }
-        # df.astype({'col1': 'int32'}).dtypes
 
-        # datatypes = self.df.dtypes
-        # print(datatypes)
         self.df = self.df.astype(convert_dict)
         # print("")
         # print(datatypes)
-        return self.df
+        # return self.df
+
+        # delete all requests  except POST
+
+    def del_requests(self):
+        # write list of requests
+        # cs_method_list = self.df['cs-method'].tolist()
+        # res_list = []
+        # for item in cs_method_list:
+        #     if item not in res_list:
+        #         res_list.append(item)
+        # # print list of all requests
+        # print(res_list)
+        # print(self.df)
+        self.df = self.df[self.df['cs-method'] == "POST"]  # метод в датафрейме с лямбдой  - удалить self.clear_df
+        self.df = self.df[~self.df['c-ip'].str.contains('192|10|127|::1')]
+        # print(self.df)
+        # self.df = self.df.drop_duplicates(subset=['c-ip'])
+        # print(self.df)
+
+        # print(self.df.columns.values.tolist())
+        # return self.res
 
     # get df with needed columns
-    def new_df(self):
-        self.cut_df = pd.DataFrame(data=self.df[['cs-method', 'cs-username', 'c-ip']])
-        return self.cut_df
+    def short_df(self):
+        self.df = self.df.drop(self.df.columns[[0, 1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13]], axis=1)
+        # print('\n')
+        # print(self.df.columns.values.tolist())
+        print(self.df)
+        print('\n')
+        print('\n')
+        # self.df = pd.DataFrame(self.df.groupby(['c-ip', 'cs-username']).size(), columns=['Count'])
 
-    # delete all requests  except POST
-    def del_requests(self):
-        cs_method_list = self.df['cs-method'].tolist()
-        res_list = []
-        for item in cs_method_list:
-            if item not in res_list:
-                res_list.append(item)
-        # print list of all requests
-        print(res_list)
-
-        self.clear_df = self.cut_df[self.cut_df['cs-method'] == "POST"]
-        return self.clear_df
+    # def concat_files(self):
+    #     objects_list = []
+    #     for report in report_list:
+    #         objects_list.append(report.black_list)
+    #         # print(report.black_list.columns.values)  # debug
+    #     self.df = pd.concat(objects_list)
 
     #  splits the field c-ip apart
     def ip_sep(self):
@@ -79,21 +94,21 @@ class Converter:
                            }
         tmp = self.ip_df[self.ip_df['num_1'] != "::1"]  # fix bugs
         self.ip_df = tmp.astype(convert_dict_ip)
-        return self.ip_df
+        # return self.ip_df
 
     #  use call functions
     def use_all_functions(self):
         self.convert_df()
-        self.new_df()
         self.del_requests()
-        self.ip_sep()
+        self.short_df()
+        # self.ip_sep()
 
     # write function execution result into xlsx document in different sheets
     def save_result(self, path):
         save = open_save.FileDumper(path)
         dict_elist = {
-            # "all_logs": self.df,
-            "short_info": self.clear_df,
-            "ip in dif cells": self.ip_df
+            # "all_logs": self.df
+            "short_info": self.df,
+            # "ip in dif cells": self.ip_df
         }
         save.write_file(dict_elist)
