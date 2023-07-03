@@ -3,6 +3,8 @@ import open_save
 
 
 class Converter:
+    test_df = pd.DataFrame()
+
     def __init__(self, file_list):
         self.file_list = file_list
         self.df = pd.DataFrame()
@@ -64,17 +66,21 @@ class Converter:
         self.df = self.df.drop(self.df.columns[[0, 1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13]], axis=1)
         # print('\n')
         # print(self.df.columns.values.tolist())
-        print(self.df)
-        print('\n')
-        print('\n')
+        # print(self.df)
+        # print('\n')
+        # print('\n')
         # self.df = pd.DataFrame(self.df.groupby(['c-ip', 'cs-username']).size(), columns=['Count'])
 
-    # def concat_files(self):
-    #     objects_list = []
-    #     for report in report_list:
-    #         objects_list.append(report.black_list)
-    #         # print(report.black_list.columns.values)  # debug
-    #     self.df = pd.concat(objects_list)
+    def concat_files(self):
+
+        Converter.test_df = pd.concat([Converter.test_df, self.df], ignore_index=True)
+        print('Row count is:', len(Converter.test_df.index))
+        # print(self.test_df)
+
+    #  without cycle
+    @staticmethod
+    def group_ip():
+        Converter.test_df = pd.DataFrame(Converter.test_df.groupby(['c-ip', 'cs-username']).size(), columns=['Count'])
 
     #  splits the field c-ip apart
     def ip_sep(self):
@@ -98,9 +104,11 @@ class Converter:
 
     #  use call functions
     def use_all_functions(self):
+        # print(Converter.test_df)
         self.convert_df()
         self.del_requests()
         self.short_df()
+        self.concat_files()
         # self.ip_sep()
 
     # write function execution result into xlsx document in different sheets
@@ -108,7 +116,8 @@ class Converter:
         save = open_save.FileDumper(path)
         dict_elist = {
             # "all_logs": self.df
-            "short_info": self.df,
+            # "short_info": self.df  # for few documents [dataframe]
             # "ip in dif cells": self.ip_df
+            "all_ip": Converter.test_df  # for one document [series]
         }
         save.write_file(dict_elist)
