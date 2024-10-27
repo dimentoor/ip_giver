@@ -1,4 +1,4 @@
-# import pandas as pd
+import pandas as pd
 import os
 import time
 import open_save
@@ -8,7 +8,6 @@ import urls
 start_time = time.time()
 
 if __name__ == '__main__':
-
     test_list = open_save.FileLoader(urls.input_path)
 
     # list of file names
@@ -27,3 +26,21 @@ if __name__ == '__main__':
             work_df.save_result(urls.save_path + '/' + '{}_{}'.format('test', 'test.xlsx'))
 
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    print("Test")
+
+    # geo_data = pd.read_csv(urls.path_csv)
+    #
+    # # print(geo_data)
+    #
+    # # sort
+    # geo_data_rus = geo_data[geo_data['country_name'] == "Russia"]
+    # # columns_name
+    # geo_data_unique = geo_data.nunique()
+    # test_df = geo_data_rus[['prefix', 'city_name', 'country_name',
+    #                         'registered_country_name']]
+    #                         # 'traits_is_anonymous_proxy', 'traits_is_satellite_provider']]
+    #
+    # # print(geo_data_unique)
+    #
+    # print(test_df)
